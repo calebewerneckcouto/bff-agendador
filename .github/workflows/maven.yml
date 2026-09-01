@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +20,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-
-      
+          cache-dependency-path: bff-agendador/pom.xml
 
       - name: Build e testes
-        run: ./mvnw clean verify
+        working-directory: bff-agendador
+        run: chmod +x ./mvnw && ./mvnw clean verify
