@@ -1,0 +1,117 @@
+name: javanauta-agendador
+
+# Sobe o BFF e os microsserviços usuario, agendador-tarefas e notificacao
+# com Postgres (usuario) e MongoDB (agendador-tarefas).
+#
+# Os projetos devem estar na mesma pasta pai:
+#   Javanauta/usuario
+#   Javanauta/agendador-tarefas
+#   Javanauta/notificacao
+#   Javanauta/bff-agendador
+#
+# Uso (na pasta bff-agendador):
+#   docker compose up --build
+
+services:
+  postgres-usuario:
+    image: postgres:16
+    container_name: postgres-usuario
+    environment:
+      POSTGRES_DB: agendadorTarefa
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_usuario_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d agendadorTarefa"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mongodb-agendador:
+    image: mongo:7
+    container_name: mongodb-agendador
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_agendador_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  usuario:
+    build:
+      context: ../usuario
+      dockerfile: Dockerfile
+    image: usuario:0.0.1-SNAPSHOT
+    container_name: usuario-ms
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-usuario:5432/agendadorTarefa
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    depends_on:
+      postgres-usuario:
+        condition: service_healthy
+    restart: unless-stopped
+
+  agendador-tarefas:
+    build:
+      context: ../agendador-tarefas
+      dockerfile: Dockerfile
+    image: agendador-tarefas:0.0.1-SNAPSHOT
+    container_name: agendador-tarefas
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb-agendador:27017/db_agendador
+      USUARIO_URL: http://usuario:8080
+    depends_on:
+      mongodb-agendador:
+        condition: service_healthy
+      usuario:
+        condition: service_started
+    restart: unless-stopped
+
+  notificacao:
+    build:
+      context: ../notificacao/notificacao
+      dockerfile: Dockerfile
+    image: notificacao:latest
+    container_name: notificacao
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+
+  bff-agendador:
+    build:
+      context: ./bff-agendador
+      dockerfile: Dockerfile
+    image: bff-agendador:0.0.1-SNAPSHOT
+    container_name: bff-agendador
+    ports:
+      - "8083:8083"
+    environment:
+      USUARIO_URL: http://usuario:8080
+      TAREFAS_URL: http://agendador-tarefas:8081
+      NOTIFICACAO_URL: http://notificacao:8082
+      USUARIO_EMAIL: ${USUARIO_EMAIL:-calebewerneck@gmail.com}
+      USUARIO_SENHA: ${USUARIO_SENHA:-1234}
+    depends_on:
+      usuario:
+        condition: service_started
+      agendador-tarefas:
+        condition: service_started
+      notificacao:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  postgres_usuario_data:
+  mongo_agendador_data:

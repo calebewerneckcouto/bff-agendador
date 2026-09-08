@@ -73,7 +73,28 @@ cron.tarefas=0 0/5 * * * *
 
 > **Importante:** `usuario.email` e `usuario.senha` devem corresponder a um usuário **cadastrado** no microsserviço usuario. Não commite credenciais reais no repositório.
 
-## Como executar
+## Docker (stack completa)
+
+Na pasta deste repositório (`bff-agendador`), com os projetos **usuario**, **agendador-tarefas** e **notificacao** ao lado:
+
+```bash
+docker compose up --build
+```
+
+Isso sobe:
+
+| Serviço | Porta | Banco |
+|---------|-------|--------|
+| usuario | 8080 | Postgres (`5432`, db `agendadorTarefa`) |
+| agendador-tarefas | 8081 | MongoDB (`27017`, db `db_agendador`) |
+| notificacao | 8082 | — |
+| bff-agendador | 8083 | — |
+
+Swagger do BFF: http://localhost:8083/swagger-ui.html
+
+As credenciais do cron (`usuario.email` / `usuario.senha`) podem ser sobrescritas com `USUARIO_EMAIL` e `USUARIO_SENHA` no ambiente ou em um arquivo `.env`.
+
+## Como executar (local, sem Docker)
 
 Entre na pasta do módulo Maven:
 
