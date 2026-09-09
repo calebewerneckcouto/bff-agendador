@@ -1,11 +1,12 @@
 package com.javanauta.bff_agendador.infrastructure.client;
 
 import com.javanauta.bff_agendador.business.dto.TarefasDTO;
+import com.javanauta.bff_agendador.infrastructure.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "notificacao", url = "${notificacao.url}", path = "/email")
+@FeignClient(name = "notificacao", url = "${notificacao.url}", path = "/email", configuration = FeignConfig.class)
 public interface EmailClient {
 
     @PostMapping

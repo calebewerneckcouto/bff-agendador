@@ -5,6 +5,7 @@ import com.javanauta.bff_agendador.business.UsuarioService;
 import com.javanauta.bff_agendador.business.dto.EnderecoDTO;
 import com.javanauta.bff_agendador.business.dto.TelefoneDTO;
 import com.javanauta.bff_agendador.business.dto.UsuarioDTO;
+import com.javanauta.bff_agendador.business.dto.ViaCepDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -105,6 +106,14 @@ public class UsuarioController {
                                                        @RequestHeader("Authorization")String token){
         return ResponseEntity.ok(usuarioService.atualizaTelefone(id,dto,token));
     }
+
+    @GetMapping("/endereco/{cep}")
+    @Operation(summary = "Busca Cep")
+    public ResponseEntity<ViaCepDTO> buscarCep(@PathVariable("cep") String cep) {
+        return ResponseEntity.ok(usuarioService.buscarEnderecoPorCep(cep));
+    }
+
+
 
     
 }

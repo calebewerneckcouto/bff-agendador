@@ -3,7 +3,9 @@ package com.javanauta.bff_agendador.business;
 import com.javanauta.bff_agendador.business.dto.EnderecoDTO;
 import com.javanauta.bff_agendador.business.dto.TelefoneDTO;
 import com.javanauta.bff_agendador.business.dto.UsuarioDTO;
+import com.javanauta.bff_agendador.business.dto.ViaCepDTO;
 import com.javanauta.bff_agendador.infrastructure.client.UsuarioClient;
+import com.javanauta.bff_agendador.infrastructure.exception.IllegalArgumentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -55,4 +57,14 @@ public class UsuarioService {
     public TelefoneDTO atualizaTelefone(Long idTelefone, TelefoneDTO telefoneDTO, String token) {
         return usuarioClient.atualizaTelefone(telefoneDTO, idTelefone, token);
     }
+
+
+    public ViaCepDTO buscarEnderecoPorCep(String cep) {
+        if (cep == null || !cep.replaceAll("\\D", "").matches("\\d{8}")) {
+            throw new IllegalArgumentException("Cep invalido");
+        }
+        return usuarioClient.buscarDadosCep(cep.replaceAll("\\D", ""));
+    }
+
+
 }
