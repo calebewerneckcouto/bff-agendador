@@ -2,6 +2,7 @@ package com.javanauta.bff_agendador.infrastructure.client;
 
 import com.javanauta.bff_agendador.business.dto.TarefasDTO;
 import com.javanauta.bff_agendador.business.enums.StatusNotificacao;
+import com.javanauta.bff_agendador.infrastructure.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@FeignClient(name = "tarefas", url = "${tarefas.url}", path = "/tarefas")
+@FeignClient(name = "tarefas", url = "${tarefas.url}", path = "/tarefas", configuration = FeignConfig.class)
 public interface TarefasClient {
 
     @PostMapping
