@@ -30,8 +30,8 @@ public class UsuarioService {
         return usuarioClient.buscaUsuarioPorEmail(email, token);
     }
 
-    public List<UsuarioDTO> buscarTodosUsuarios() {
-        return usuarioClient.buscarTodosUsuarios();
+    public List<UsuarioDTO> buscarTodosUsuarios(String token) {
+        return usuarioClient.buscarTodosUsuarios(token);
     }
 
     public void deletaUsuarioPorEmail(String email, String token) {
