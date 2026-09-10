@@ -4,6 +4,7 @@ import com.javanauta.bff_agendador.business.TarefasService;
 import com.javanauta.bff_agendador.business.dto.TarefasDTO;
 import com.javanauta.bff_agendador.business.enums.StatusNotificacao;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class TarefasController {
     @Operation(summary = "Gravar tarefa")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<TarefasDTO> gravarTarefas(@RequestBody TarefasDTO tarefasDTO,
-                                                    @RequestHeader("Authorization") String token) {
+                                                    @Parameter(hidden = true) @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(tarefasService.gravarTarefa(token, tarefasDTO));
     }
 
@@ -36,14 +37,14 @@ public class TarefasController {
     public ResponseEntity<List<TarefasDTO>> buscaListaDeTafefasPorPeriodo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicial,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFinal,
-            @RequestHeader("Authorization") String token) {
+            @Parameter(hidden = true) @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(tarefasService.buscaTarefasAgendadasPorPeriodo(dataInicial, dataFinal, token));
     }
 
     @GetMapping
     @Operation(summary = "Buscar tarefas por email do usuario logado")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<List<TarefasDTO>> buscaTarefasPorEmail(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<TarefasDTO>> buscaTarefasPorEmail(@Parameter(hidden = true) @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(tarefasService.buscaTarefasPorEmail(token));
     }
 
@@ -51,7 +52,7 @@ public class TarefasController {
     @Operation(summary = "Deletar tarefa por id")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<Void> deletaTarefaPorId(@RequestParam("id") String id,
-                                                  @RequestHeader("Authorization") String token) {
+                                                  @Parameter(hidden = true) @RequestHeader("Authorization") String token) {
         tarefasService.deletaTarefasPorId(id, token);
         return ResponseEntity.ok().build();
     }
@@ -61,7 +62,7 @@ public class TarefasController {
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<TarefasDTO> alteraStatusNotificacao(@RequestParam("status") StatusNotificacao notificacao,
                                                               @RequestParam("id") String id,
-                                                              @RequestHeader("Authorization") String token) {
+                                                              @Parameter(hidden = true) @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(tarefasService.alteraStatus(notificacao, id, token));
     }
 
@@ -70,7 +71,7 @@ public class TarefasController {
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<TarefasDTO> updateTarefas(@RequestBody TarefasDTO tarefasDTO,
                                                     @RequestParam("id") String id,
-                                                    @RequestHeader("Authorization") String token) {
+                                                    @Parameter(hidden = true) @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(tarefasService.updateTarefas(tarefasDTO, id, token));
     }
 }

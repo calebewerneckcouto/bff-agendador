@@ -25,7 +25,7 @@ public interface UsuarioClient {
                                     @RequestHeader("Authorization") String token);
 
     @GetMapping("/todos")
-    List<UsuarioDTO> buscarTodosUsuarios();
+    List<UsuarioDTO> buscarTodosUsuarios(@RequestHeader("Authorization") String token);
 
     @DeleteMapping("/{email}")
     void deletaUsuarioPorEmail(@PathVariable("email") String email,

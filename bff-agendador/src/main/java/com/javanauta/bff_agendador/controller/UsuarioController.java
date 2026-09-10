@@ -7,6 +7,7 @@ import com.javanauta.bff_agendador.business.dto.TelefoneDTO;
 import com.javanauta.bff_agendador.business.dto.UsuarioDTO;
 import com.javanauta.bff_agendador.business.dto.ViaCepDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -44,22 +45,23 @@ public class UsuarioController {
     @Operation(summary = "Buscar usuario por email")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<UsuarioDTO> buscaUsuarioPorEmail(@RequestParam("email") String email,
-                                                           @RequestHeader("Authorization")String token) {
+                                                           @Parameter(hidden = true) @RequestHeader("Authorization")String token) {
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email,token));
     }
 
     @GetMapping("/todos")
     @Operation(summary = "Buscar todos os usuarios")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<List<UsuarioDTO>> buscarTodosUsuarios() {
-        return ResponseEntity.ok(usuarioService.buscarTodosUsuarios());
+    public ResponseEntity<List<UsuarioDTO>> buscarTodosUsuarios(
+            @Parameter(hidden = true) @RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(usuarioService.buscarTodosUsuarios(token));
     }
 
     @DeleteMapping("/{email}")
     @Operation(summary = "Deletar usuario por email")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<Void> deletaUsuarioPorEmail(@PathVariable("email") String email,
-                                                      @RequestHeader("Authorization")String token) {
+                                                      @Parameter(hidden = true) @RequestHeader("Authorization")String token) {
         usuarioService.deletaUsuarioPorEmail(email,token);
         return ResponseEntity.ok().build();
     }
@@ -69,7 +71,7 @@ public class UsuarioController {
     @Operation(summary = "Atualizar usuario")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<UsuarioDTO> atualizaDadoUsuario(@RequestBody UsuarioDTO dto,
-                                                          @RequestHeader("Authorization")String token) {
+                                                          @Parameter(hidden = true) @RequestHeader("Authorization")String token) {
         return ResponseEntity.ok(usuarioService.atualizaDadosUsuario(dto,token));
     }
 
@@ -84,7 +86,7 @@ public class UsuarioController {
     @Operation(summary = "Cadastrar telefone")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<TelefoneDTO> cadastraTelefone(@RequestBody TelefoneDTO dto,
-                                                        @RequestHeader("Authorization")String token) {
+                                                        @Parameter(hidden = true) @RequestHeader("Authorization")String token) {
         return ResponseEntity.ok(usuarioService.cadastraTelefone(dto,token));
     }
 
@@ -93,7 +95,7 @@ public class UsuarioController {
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<EnderecoDTO>atualizaEndereco(@RequestBody EnderecoDTO dto,
                                                        @RequestParam("id")Long id,
-                                                       @RequestHeader("Authorization")String token){
+                                                       @Parameter(hidden = true) @RequestHeader("Authorization")String token){
         return ResponseEntity.ok(usuarioService.atualizaEndereco(id,dto,token));
     }
 
@@ -103,12 +105,13 @@ public class UsuarioController {
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<TelefoneDTO>atualizaTelefone(@RequestBody TelefoneDTO dto,
                                                        @RequestParam("id")Long id,
-                                                       @RequestHeader("Authorization")String token){
+                                                       @Parameter(hidden = true) @RequestHeader("Authorization")String token){
         return ResponseEntity.ok(usuarioService.atualizaTelefone(id,dto,token));
     }
 
     @GetMapping("/endereco/{cep}")
     @Operation(summary = "Busca Cep")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<ViaCepDTO> buscarCep(@PathVariable("cep") String cep) {
         return ResponseEntity.ok(usuarioService.buscarEnderecoPorCep(cep));
     }
