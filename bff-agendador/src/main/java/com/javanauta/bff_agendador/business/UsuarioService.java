@@ -62,6 +62,10 @@ public class UsuarioService {
         usuarioClient.deletaTelefone(id, token);
     }
 
+    public void deletaEndereco(Long id, String token) {
+        usuarioClient.deletaEndereco(id, token);
+    }
+
 
     public ViaCepDTO buscarEnderecoPorCep(String cep) {
         if (cep == null || !cep.replaceAll("\\D", "").matches("\\d{8}")) {

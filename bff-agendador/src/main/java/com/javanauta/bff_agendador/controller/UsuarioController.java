@@ -118,6 +118,17 @@ public class UsuarioController {
         return ResponseEntity.ok().build();
     }
 
+
+
+    @DeleteMapping("/endereco")
+    @Operation(summary = "Deletar endereco")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<Void> deletaEndereco(@RequestParam("id") Long id,
+                                               @Parameter(hidden = true) @RequestHeader("Authorization") String token) {
+        usuarioService.deletaEndereco(id, token);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/endereco/{cep}")
     @Operation(summary = "Busca Cep")
     @SecurityRequirement(name = "Bearer Authentication")
