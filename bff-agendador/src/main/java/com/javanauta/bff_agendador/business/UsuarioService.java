@@ -58,6 +58,10 @@ public class UsuarioService {
         return usuarioClient.atualizaTelefone(telefoneDTO, idTelefone, token);
     }
 
+    public void deletaTelefone(Long id, String token) {
+        usuarioClient.deletaTelefone(id, token);
+    }
+
 
     public ViaCepDTO buscarEnderecoPorCep(String cep) {
         if (cep == null || !cep.replaceAll("\\D", "").matches("\\d{8}")) {

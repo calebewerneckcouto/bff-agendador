@@ -109,6 +109,15 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.atualizaTelefone(id,dto,token));
     }
 
+    @DeleteMapping("/telefone")
+    @Operation(summary = "Deletar telefone")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<Void> deletaTelefone(@RequestParam("id") Long id,
+                                               @Parameter(hidden = true) @RequestHeader("Authorization") String token) {
+        usuarioService.deletaTelefone(id, token);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/endereco/{cep}")
     @Operation(summary = "Busca Cep")
     @SecurityRequirement(name = "Bearer Authentication")

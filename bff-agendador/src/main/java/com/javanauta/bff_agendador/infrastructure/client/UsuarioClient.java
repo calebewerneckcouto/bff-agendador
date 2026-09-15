@@ -52,6 +52,9 @@ public interface UsuarioClient {
                                  @RequestParam("id") Long id,
                                  @RequestHeader("Authorization") String token);
 
+    @DeleteMapping("/telefone")
+    void deletaTelefone(@RequestParam("id") Long id,
+                        @RequestHeader("Authorization") String token);
 
     @GetMapping("/endereco/{cep}")
     ViaCepDTO buscarDadosCep(@PathVariable("cep")String cep);
