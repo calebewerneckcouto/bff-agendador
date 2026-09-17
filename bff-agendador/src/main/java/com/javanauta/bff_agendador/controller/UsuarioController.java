@@ -2,10 +2,7 @@ package com.javanauta.bff_agendador.controller;
 
 
 import com.javanauta.bff_agendador.business.UsuarioService;
-import com.javanauta.bff_agendador.business.dto.EnderecoDTO;
-import com.javanauta.bff_agendador.business.dto.TelefoneDTO;
-import com.javanauta.bff_agendador.business.dto.UsuarioDTO;
-import com.javanauta.bff_agendador.business.dto.ViaCepDTO;
+import com.javanauta.bff_agendador.business.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -136,7 +133,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.buscarEnderecoPorCep(cep));
     }
 
-
+   @PutMapping("/senha")
+   @Operation(summary = "Altera Senha do usuario")
+   @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<Void> alteraSenha(@RequestBody AlteraSenhaDTO dto,@Parameter(hidden = true) @RequestHeader("Authorization") String token){
+        usuarioService.alteraSenha(dto,token);
+        return ResponseEntity.ok().build();
+   }
 
     
 }

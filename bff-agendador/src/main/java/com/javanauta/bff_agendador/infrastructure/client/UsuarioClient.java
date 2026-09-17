@@ -1,9 +1,6 @@
 package com.javanauta.bff_agendador.infrastructure.client;
 
-import com.javanauta.bff_agendador.business.dto.EnderecoDTO;
-import com.javanauta.bff_agendador.business.dto.TelefoneDTO;
-import com.javanauta.bff_agendador.business.dto.UsuarioDTO;
-import com.javanauta.bff_agendador.business.dto.ViaCepDTO;
+import com.javanauta.bff_agendador.business.dto.*;
 import com.javanauta.bff_agendador.infrastructure.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -62,5 +59,8 @@ public interface UsuarioClient {
 
     @GetMapping("/endereco/{cep}")
     ViaCepDTO buscarDadosCep(@PathVariable("cep")String cep);
+
+    @PutMapping("/senha")
+    void alteraSenha(@RequestBody AlteraSenhaDTO dto,@RequestHeader("Authorization") String token);
 
 }

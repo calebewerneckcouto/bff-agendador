@@ -1,9 +1,6 @@
 package com.javanauta.bff_agendador.business;
 
-import com.javanauta.bff_agendador.business.dto.EnderecoDTO;
-import com.javanauta.bff_agendador.business.dto.TelefoneDTO;
-import com.javanauta.bff_agendador.business.dto.UsuarioDTO;
-import com.javanauta.bff_agendador.business.dto.ViaCepDTO;
+import com.javanauta.bff_agendador.business.dto.*;
 import com.javanauta.bff_agendador.infrastructure.client.UsuarioClient;
 import com.javanauta.bff_agendador.infrastructure.exception.IllegalArgumentException;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +69,11 @@ public class UsuarioService {
             throw new IllegalArgumentException("Cep invalido");
         }
         return usuarioClient.buscarDadosCep(cep.replaceAll("\\D", ""));
+    }
+
+
+    public void alteraSenha(AlteraSenhaDTO dto, String token){
+        usuarioClient.alteraSenha(dto,token);
     }
 
 
