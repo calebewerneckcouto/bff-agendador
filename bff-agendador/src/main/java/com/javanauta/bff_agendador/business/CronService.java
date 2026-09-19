@@ -28,12 +28,14 @@ public class CronService {
     @Value("${usuario.senha}")
     private String senha;
 
-    @Scheduled(cron = "${cron.tarefas:0 0/5 * * * *}")
+    @Scheduled(cron = "${cron.tarefas:0/30 * * * * *}")
     public void buscaTarefasProximaHora() {
         try {
             String token = obterToken();
             LocalDateTime horaFutura = LocalDateTime.now().plusHours(1);
             LocalDateTime horaFuturaMaisCinco = horaFutura.plusMinutes(5);
+
+            log.info("Cron janela de busca: {} ate {}", horaFutura, horaFuturaMaisCinco);
 
             List<TarefasDTO> listaTarefas = tarefasService.buscaTarefasAgendadasPorPeriodo(
                     horaFutura, horaFuturaMaisCinco, token);
